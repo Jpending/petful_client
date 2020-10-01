@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+
+@font-face {
+  font-family: 'friendly_schoolmates';
+  src: local('friendly_schoolmates'), url(./assets/friendly_schoolmates/Friendly\ Schoolmates\ \(Regular\)\ Font\ by\ Situjuh\ \(7NTypes\).otf);
+}
+
+@tailwind utilities;
