@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import petfulService from '../petfulService'
 export default class App extends React.Component {
   constructor(props) {
@@ -9,8 +9,8 @@ export default class App extends React.Component {
       myName: '',
       dogList: [],
       catList: [],
-      currDog: {},
-      currCat: {},
+      currDog: null,
+      currCat: null,
       firstName: '',
       lastName: '',
       interval: null,
@@ -27,6 +27,9 @@ export default class App extends React.Component {
   }
 
   componentWillUnmount() {
+    const {queue, myName}=this.state;
+    const headOfLine=queue[0]
+    if(headOfLine===myName) {clearInterval(this.state.interval)}
     clearInterval(this.state.interval);
   }
 
@@ -35,7 +38,7 @@ export default class App extends React.Component {
   }
 
   putUsersInQueue=(users) => {
-    users.forEach(user => {this.setState({queue: [...this.state.queue, user.name]})})
+    users.forEach(user => {this.setState({queue: [...this.state.queue, user]})})
   }
 
   updateFirstName=(firstName) => {

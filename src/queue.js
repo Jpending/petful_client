@@ -4,8 +4,9 @@ import React, {useState, useEffect} from 'react'
 
 
 
-export default queue=() => {
-  useTheInterval=() => {
+export default function queue() {
+  function useTheInterval() {
+
     const [seconds, setSeconds]=useState(0);
     const {queue, myName}=this.state;
 
@@ -19,5 +20,5 @@ export default queue=() => {
 
 
 
-  return ()
+  return ('something')
 }
