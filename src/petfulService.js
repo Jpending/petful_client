@@ -28,14 +28,12 @@ const petfulService={
   deletePerson() {
     return fetch(`${config.API_ENDPOINT}/people`, {
       method: 'DELETE',
-      headers: {
-        'content-type': 'application/json'
-      },
+
     })
       .then(res =>
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
-          :res.json()
+          :res.json
       )
   },
 
@@ -58,9 +56,7 @@ const petfulService={
   adoptCat() {
     return fetch(`${config.API_ENDPOINT}/pets/cats`, {
       method: 'DELETE',
-      // headers: {
-      //   'content-type': 'application/json'
-      // },
+
     })
       .then(res =>
         (!res.ok)
@@ -71,9 +67,7 @@ const petfulService={
   adoptDog() {
     return fetch(`${config.API_ENDPOINT}/pets/dogs`, {
       method: 'DELETE',
-      // headers: {
-      //   'content-type': 'application/json'
-      // },
+
     })
       .then(res =>
         (!res.ok)

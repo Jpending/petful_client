@@ -8,7 +8,7 @@ export default function PetCards(props) {
 
   return (
     <div>
-      <img className="w-full" id="adopt" src={imageURL} alt="Sunset in the mountains" />
+      <img className=" min-w-full" id="adopt" src={imageURL} alt="Sunset in the mountains" />
       <div className="px-6 py-4">
         {notAvailable===true&&<h2 className="text-red-600 font-bold text-xl">Pet not available</h2>}
         <div className="font-bold text-2xl tracking-widest mb-2">{name}</div>

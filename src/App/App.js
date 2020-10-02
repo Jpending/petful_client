@@ -1,7 +1,6 @@
 import React from 'react'
 import {Link, Route, Switch} from 'react-router-dom';
 import Adopt from './Adopt'
-import petfulService from '../petfulService'
 import About from './About';
 import Nav from './Nav';
 import FAQ from './FAQ';
@@ -35,8 +34,8 @@ export default class App extends React.Component {
         <main className='items-center container flex flex-col flex-wrap'>
           {this.renderRoutes()}
         </main>
-        <footer className="flex items-center h-48 flex-col md:flex-row w-screen pb-8 bg-gradient-to-r from-blue-600 to-blue-600 via-blue-400 p-6 text-white mt-6 ">
-          <div className="w-full flex-1 pt-2 text-center">
+        <footer className="flex items-center h-auto overflow-y-hidden flex-col md:flex-row w-screen pb-8 bg-gradient-to-r from-blue-600 to-blue-600 via-blue-400 p-6 text-white mt-6 ">
+          <div className="w-full flex-1 pt-2 h-full text-center">
             <div className="text-3xl font-narrow tracking-wide flex flex-1 flex-col sm:flex-row justify-items-around">
               <Link to="/faq"><div className="flex-1 sm:mx-12 md:mx-24 text-teal-200 hover:text-white">
                 FAQ</div></Link>
