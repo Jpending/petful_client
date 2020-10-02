@@ -10,13 +10,14 @@ const petfulService={
           :res.json()
       )
   },
-  postPerson(person) {
+  postPerson(name) {
+    const newPerson={'person': name}
     return fetch(`${config.API_ENDPOINT}/people`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify(person),
+      body: JSON.stringify(newPerson),
     })
       .then(res =>
         (!res.ok)
@@ -39,7 +40,7 @@ const petfulService={
   },
 
   getDogs() {
-    return fetch(`${config.PET_ENDPOINT}/dogs`)
+    return fetch(`${config.API_ENDPOINT}/pets/dogs`)
       .then(res =>
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
@@ -47,7 +48,7 @@ const petfulService={
       )
   },
   getCats() {
-    return fetch(`${config.PET_ENDPOINT}/cats`)
+    return fetch(`${config.API_ENDPOINT}/pets/cats`)
       .then(res =>
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
@@ -55,7 +56,7 @@ const petfulService={
       )
   },
   adoptCat() {
-    return fetch(`${config.API_ENDPOINT}/cats`, {
+    return fetch(`${config.API_ENDPOINT}/pets/cats`, {
       method: 'DELETE',
       headers: {
         'content-type': 'application/json'
@@ -68,7 +69,7 @@ const petfulService={
       )
   },
   adoptDog() {
-    return fetch(`${config.API_ENDPOINT}/dogs`, {
+    return fetch(`${config.API_ENDPOINT}/pets/dogs`, {
       method: 'DELETE',
       headers: {
         'content-type': 'application/json'

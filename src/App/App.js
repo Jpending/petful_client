@@ -1,4 +1,5 @@
 import React from 'react'
+import PetCards from '../PetCards';
 import petfulService from '../petfulService'
 export default class App extends React.Component {
   constructor(props) {
@@ -8,9 +9,10 @@ export default class App extends React.Component {
       inQueue: false,
       myName: '',
       dogList: [],
+      dogIndex: 0,
       catList: [],
-      currDog: null,
-      currCat: null,
+      currDog: {},
+      currCat: {},
       firstName: '',
       lastName: '',
       interval: null,
@@ -19,11 +21,11 @@ export default class App extends React.Component {
   }
   //.forEach(user => {this.setState({queue: [...this.state.queue, user.name]})})
   componentDidMount=() => {
+    petfulService.getCats()
+      .then(cats => this.setState({catList: cats, currCat: cats[0]}))
+    petfulService.getDogs()
+      .then(dogs => this.setState({dogList: dogs, currDog: dogs[0], dogIndex: dogs.indexOf(dogs[0])}))
 
-    petfulService.getPeople()
-      .then(this.putUsersInQueue)
-    // .then(interval=setInterval(this.timer, 5000),
-    //   this.setState({interval: interval}))
   }
 
   componentWillUnmount() {
@@ -35,6 +37,19 @@ export default class App extends React.Component {
 
   timer=() => {
     this.handleQueueMove();
+  }
+
+  handleClickNextDog() {
+    const {dogList, dogIndex}=this.state;
+    this.setState({dogIndex: dogIndex+1})
+    this.setState({currDog: dogList[dogIndex+1]})
+    console.log(dogList[dogIndex])
+  }
+  handleClickPrevDog() {
+    const {currDog, dogList, dogIndex}=this.state;
+    this.setState({dogIndex: dogIndex-1})
+    this.setState({currDog: dogList[dogList.indexOf(currDog)-1]})
+    console.log(dogList[dogIndex], dogIndex)
   }
 
   putUsersInQueue=(users) => {
@@ -50,17 +65,23 @@ export default class App extends React.Component {
   }
 
   addToQueue=() => {
-    const {firstName, lastName}=this.state;
+    const {firstName, lastName, myName}=this.state;
     const nameString=`${firstName} ${lastName}`;
+    let interval=setInterval(this.timer, 5000)
     this.setState({myName: nameString})
-    this.setState({queue: [...this.state.queue, nameString]})
+    console.log(myName)
+    petfulService.postPerson(nameString).then(
+      petfulService.getPeople()
+        .then(this.putUsersInQueue)
+        .then(this.setState({interval: interval}))
+    );
+
   }
 
   handleClickJoinQueue=() => {
-
-    this.setState({inQueue: !this.state.inQueue}, () => {this.addToQueue()});
-    let interval=setInterval(this.timer, 5000);
-    this.setState({interval: interval})
+    this.setState({inQueue: true});
+    this.addToQueue()
+      ;
   }
 
   handleQueueMove=() => {
@@ -72,7 +93,7 @@ export default class App extends React.Component {
   }
 
   render() {
-
+    const {currCat, currDog, dogIndex, dogList, catList, catIndex}=this.state;
     return (
       <div className="App font-mono h-screen">
         <header id="top" className="flex items-center w-screen justify-evenly flex-row flex-wrap bg-gradient-to-r from-blue-600 to-blue-600 via-blue-400 p-6 text-white mb-6">
@@ -136,33 +157,21 @@ export default class App extends React.Component {
           {/* will display top of queue for both dogs and cats */}
           <div className="pet-cards container py-24 px-10 flex-1 flex flex-col md:flex-row justify-around items-center">
             <div className=" flex-1 max-w-sm rounded overflow-hidden shadow-lg my-6 sm:mx-10 sm:px-5 w-full">
-              <img className="w-full" id="adopt" src="https://picsum.photos/500" alt="Sunset in the mountains" />
-              <div className="px-6 py-4">
-                <div className="font-bold text-xl mb-2">Available Dog</div>
-                <p className="text-gray-700 text-base" >
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
-            </p>
-              </div>
+              <PetCards {...currDog} />
               <div className="sm:px-6 sm:pt-4 sm:pb-2 flex-1 flex flex-col sm:flex-row items-center justify-around ">
-                <button className="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 m-1 w-full rounded focus:outline-none focus:shadow-outline" type="button">
+                {dogIndex>0&&<button onClick={() => this.handleClickPrevDog()} className="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 m-1 w-full rounded focus:outline-none focus:shadow-outline" type="button">
                   Prev
-      </button>
-                {this.state.queue[0]===this.state.myNam&&<button className="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 m-1 w-full rounded focus:outline-none focus:shadow-outline" type="button">
+      </button>}
+                {this.state.queue[0]===this.state.myName&&<button className="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 m-1 w-full rounded focus:outline-none focus:shadow-outline" type="button">
                   Adopt
       </button>}
-                <button className="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 m-1 w-full rounded focus:outline-none focus:shadow-outline" type="button">
+                {dogIndex<dogList.length-1&&<button onClick={() => this.handleClickNextDog()} className="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 m-1 w-full rounded focus:outline-none focus:shadow-outline" type="button">
                   Next
-      </button>
+      </button>}
               </div>
             </div>
             <div className="flex-1 max-w-sm rounded overflow-hidden shadow-lg my-6 sm:mx-10 sm:px-5 w-full">
-              <img className="w-full" src="https://picsum.photos/400" alt="Sunset in the mountains" />
-              <div className="px-6 py-4">
-                <div className="font-bold text-xl mb-2">Available Cat</div>
-                <p className="text-gray-700 text-base">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
-            </p>
-              </div>
+              <PetCards {...currCat} />
               <div className="sm:px-6 sm:pt-4 sm:pb-2 flex-1 flex flex-col sm:flex-row items-center justify-around ">
                 <button className="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 m-1 w-full rounded focus:outline-none focus:shadow-outline" type="button">
                   Prev
