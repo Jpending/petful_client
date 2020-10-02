@@ -30,7 +30,6 @@ export default class App extends React.Component {
     petfulService.getDogs()
       .then(dogs => this.setState({dogList: dogs, currDog: dogs[0], dogIndex: dogs.indexOf(dogs[0])}))
   }
-
   componentWillUnmount() {
     const {queue, myName}=this.state;
     const headOfLine=queue[0]
@@ -49,7 +48,7 @@ export default class App extends React.Component {
   addToQueue=() => {
     const {firstName, lastName, myName}=this.state;
     const nameString=`${firstName} ${lastName}`;
-    let interval=setInterval(this.timer, 1000)
+    let interval=setInterval(this.timer, 5000)
     this.setState({myName: nameString})
     console.log(myName)
     petfulService.postPerson(nameString)
@@ -160,13 +159,13 @@ export default class App extends React.Component {
         </header>
 
         <main className='items-center container flex flex-col flex-wrap'>
-          {/* queue component should probably just be in the main component as it will rely on state */}
+
           {this.state.inQueue&&<div className="queue flex items-evenly flex-initial font-semibold text-lg tracking-tight">
             <h3 className="flex-auto px-2">Head of Queue: {this.state.queue[0]}</h3>
             <h3 className="flex-auto px-2">Next in Queue: {this.state.queue[1]}</h3>
             {this.state.queue[0]===this.state.myName&&<h3 className="flex-auto px-2">Your turn!</h3>}
           </div>}
-          {/* should add name with first inital only and last name to end of queue */}
+
           {!this.state.inQueue&&<div className="join-queue w-full max-w-xs flex-1" >
             <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
               <div className="mb-4">
@@ -189,7 +188,7 @@ export default class App extends React.Component {
               </div>
             </form>
           </div>}
-          {/* will display top of queue for both dogs and cats */}
+
           <div className="pet-cards container py-24 px-10 flex-1 flex flex-col md:flex-row justify-around items-center">
             <div className=" flex-1 max-w-sm rounded overflow-hidden shadow-lg my-6 sm:mx-10 sm:px-5 w-full">
               <PetCards {...currDog} notAvailable={this.state.recentlyAdopted.includes(currDog)} />
