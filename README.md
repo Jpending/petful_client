@@ -3,6 +3,8 @@
 Authors: John Pendergast and Ryan Whitmore
 
 [Live site demo Link](https://petful-indol.vercel.app/adopt)
+[Deployed Server Link](https://whispering-taiga-42523.herokuapp.com)
+[Server Repo Link](https://github.com/Jpending/petful_server)
 
 ## Introduction:
 
